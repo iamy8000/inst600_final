@@ -1,18 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Suspense } from 'react';
+import { BrowserRouter } from "react-router-dom";
 import './App.css';
-/* Pages */
-
+/* Containers */
+import Navigation from 'components/navigation/Navigation';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Yating's React App for final Project.
-        </p>
-      </header>
+    <div>
+      <Suspense fallback={<div />}>
+        <BrowserRouter>
+          <Navigation />
+        </BrowserRouter>
+      </Suspense>
     </div>
   );
 }

@@ -5,15 +5,15 @@ import './App.css';
 import Navigation from 'components/navigation/Navigation';
 
 function App() {
-  return (
-    <div>
-      <Suspense fallback={<div />}>
-        <BrowserRouter>
-          <Navigation />
-        </BrowserRouter>
-      </Suspense>
-    </div>
-  );
+    return (
+        <div>
+            <Suspense fallback={<div />}>
+                <BrowserRouter>
+                    <Navigation />
+                </BrowserRouter>
+            </Suspense>
+        </div>
+    );
 }
 
 export default App;

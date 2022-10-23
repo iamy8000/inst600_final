@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import "./Intro.css"
-/* Component */
+import "./Logo.css"
+import { useNavigate } from "react-router-dom";
+/* Components */
+import Button from "@mui/material/Button";
+/* Constants */
+import { Paths } from "constants/general"
 
-/* Assets */
 const logoOptions = [
     "https://content.sportslogos.net/logos/32/743/full/maryland_terrapins_logo_primary_20052066.png",
     "https://1000logos.net/wp-content/uploads/2021/06/Maryland-Terrapins-logo.png",
@@ -15,11 +18,16 @@ const logoOptions = [
 ]
 
 function Intro(props) {
+    const navigate = useNavigate();
     const [umdLogo, setUmdLogo] = useState(logoOptions[0])
 
     const changeLogo = () => {
         const randomIndex = Math.floor(Math.random() * logoOptions.length);
         setUmdLogo(logoOptions[randomIndex])
+    }
+
+    const goChart = () => {
+        navigate(Paths.Chart)
     }
 
     return (
@@ -28,9 +36,21 @@ function Intro(props) {
             <p>
                 Yating's React App for Final Project.
             </p>
-            <button className='LogoButton' type='button' onClick={changeLogo}>
+            <Button
+                variant='contained'
+                onClick={changeLogo}
+                sx={{
+                    marginBottom: '1rem',
+                }}
+            >
                 Click To Change Logo
-            </button>
+            </Button>
+            <Button
+                variant='contained'
+                onClick={goChart}
+            >
+                Click to go to chart page
+            </Button>
         </header>
     )
 }

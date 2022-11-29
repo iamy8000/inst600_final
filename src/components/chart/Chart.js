@@ -12,12 +12,13 @@ import {
     Legend,
 } from 'chart.js';
 /* Components */
-import Container from "@mui/material/Container";
 import {
     Bar,
     Line,
     Pie,
 } from 'react-chartjs-2';
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid"
 /* API */
 import ChartAPI from 'services/ChartAPI';
 
@@ -210,10 +211,18 @@ function Chart(props) {
     }
 
     return (
-        <Container maxWidth='md'>
-            {displayBar()}
-            {displayLine()}
-            {displayPie()}
+        <Container maxWidth='lg'>
+            <Grid container>
+                <Grid item xs={6}>
+                    {displayBar()}
+                </Grid>
+                <Grid item xs={4}>
+                    {displayLine()}
+                </Grid>
+                <Grid item xs={6}>
+                    {displayPie()}
+                </Grid>
+            </Grid>
         </Container>
     )
 }

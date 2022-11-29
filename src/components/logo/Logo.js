@@ -21,11 +21,6 @@ function Intro(props) {
     const navigate = useNavigate();
     const [umdLogo, setUmdLogo] = useState(logoOptions[0])
 
-    const changeLogo = () => {
-        const randomIndex = Math.floor(Math.random() * logoOptions.length);
-        setUmdLogo(logoOptions[randomIndex])
-    }
-
     const goChart = () => {
         navigate(Paths.Chart)
     }
@@ -36,15 +31,6 @@ function Intro(props) {
             <p>
                 Yating's React App for Final Project.
             </p>
-            <Button
-                variant='contained'
-                onClick={changeLogo}
-                sx={{
-                    marginBottom: '1rem',
-                }}
-            >
-                Click To Change Logo
-            </Button>
             <Button
                 variant='contained'
                 onClick={goChart}

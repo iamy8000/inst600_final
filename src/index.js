@@ -3,19 +3,16 @@ import ReactDOM from "react-dom/client";
 import './index.css';
 import App from './App';
 import reportWebVitals from "./reportWebVitals";
-
-/* setup theme */
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import customTheme from "assets/customTheme";
-// const theme = createTheme(customTheme);
+import { ThemeProvider } from "@mui/material/styles";
+import CustomTheme from "theme/customTheme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
     <React.StrictMode>
-        {/* <ThemeProvider theme={theme}> */}
-        <App />
-        {/* </ThemeProvider> */}
+        <ThemeProvider theme={CustomTheme}>
+            <App />
+        </ThemeProvider>
     </React.StrictMode>,
 );
 

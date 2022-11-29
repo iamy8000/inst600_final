@@ -11,4 +11,5 @@
 
 ### Chart Page
 - [x] Resize charts
+- [x] Change color
 - [ ] Add more data & charts

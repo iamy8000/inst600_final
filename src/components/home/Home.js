@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import "./Home.css"
 import _ from 'lodash'
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
@@ -23,6 +24,7 @@ import TwitterIcon from "mdi-react/TwitterIcon";
 import ArrowTopRightIcon from "mdi-react/ArrowTopRightIcon";
 import PlayCircleIcon from "mdi-react/PlayCircleIcon";
 import NoteTextIcon from "mdi-react/NoteTextIcon";
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 /* Constants */
 import { Paths } from "constants/general"
 /* Assets */
@@ -57,7 +59,6 @@ function Home(props) {
                 <LazyLoadImage
                     className={classes.backgroundCurve}
                     alt={"background"}
-                    // src={BackgroundCurve}
                     src={wowImage}
                     width={"100vw"}
                     height={"100vh"}
@@ -73,11 +74,13 @@ function Home(props) {
                 justifyContent='center'
                 alignItems='center'
                 style={{
-                    minHeight: '90vh',
+                    position: "relative",
+                    minHeight: '100vh',
+                    minWidth: '100vw',
                     color: "white",
                     backgroundImage: `url(${BackgroundCurve})`,
                     backgroundSize: 'cover',
-                    background: "radial-gradient(100% 351.56% at 0% 100%, rgba(23, 21, 28, 0.98) 51.88%, rgba(23, 21, 28, 0) 80%)",
+                    background: "radial-gradient(100% 351.56% at 0% 100%, rgba(23, 21, 28, 0.94) 45%, rgba(23, 21, 28, 0) 90%)",
                     zIndex: 9999,
                 }}
             >
@@ -93,10 +96,10 @@ function Home(props) {
                     justifyContent='center'
                 >
                     <Fade bottom cascade>
-                        <Typography variant='h3' align='center' style={{ marginBottom: 20 }}>
+                        <Typography variant='h3' style={{ marginBottom: 20 }}>
                             World of Warships
                         </Typography>
-                        <Typography variant='h6' align='center' style={{ color: theme.palette.common.white, marginBottom: 60 }}>
+                        <Typography variant='h6' style={{ color: theme.palette.common.white, marginBottom: 60 }}>
                             A strategic online action game with a huge fleet of legendary warships
                         </Typography>
                         <Button
@@ -113,6 +116,13 @@ function Home(props) {
                             Go To Chart
                         </Button>
                     </Fade>
+                </Box>
+                <Box
+                    className="downIcon"
+                    position="absolute"
+                    bottom="50px"
+                >
+                    <KeyboardDoubleArrowDownIcon />
                 </Box>
             </Grid>
         )

@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.10.5",
     "@mdi/font": "^7.0.96",
     "@mdi/react": "^1.6.1",
+    "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.16",
     "@mui/styled-engine-sc": "^5.10.16",
     "@mui/styles": "^5.10.16",

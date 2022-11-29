@@ -76,7 +76,6 @@ function Home(props) {
                 style={{
                     position: "relative",
                     minHeight: '100vh',
-                    minWidth: '100vw',
                     color: "white",
                     backgroundImage: `url(${BackgroundCurve})`,
                     backgroundSize: 'cover',
@@ -272,8 +271,8 @@ function Home(props) {
                         zIndex={9999}
                     >
                         {/* Content */}
-                        <Typography variant='h2' align='center' style={{ color: theme.palette.common.white, marginBottom: 40 }}>
-                            Discover the statistics of WOW <br />Together we fight.
+                        <Typography variant='h3' align='center' style={{ color: theme.palette.common.white, marginBottom: 40 }}>
+                            Discover the statistics of WOW. <br />Together we fight.
                         </Typography>
 
                         <Button

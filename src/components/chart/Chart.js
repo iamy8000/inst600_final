@@ -19,6 +19,8 @@ import {
 } from 'react-chartjs-2';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid"
+import Typography from "@mui/material/Typography"
+import Divider from "@mui/material/Divider"
 /* API */
 import ChartAPI from 'services/ChartAPI';
 
@@ -35,6 +37,11 @@ function Chart(props) {
         fetchPVPBattles()
         fetchSurvivedBattles()
         fetchWinLossRatio()
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        })
     }, [])
 
     ChartJS.register(
@@ -112,15 +119,14 @@ function Chart(props) {
         }
     }
 
-    const displayBar = () => {
+    const barChart = () => {
         const data = {
             labels: playerFullName,
             datasets: [{
                 label: 'PVP Battles Played by Player',
                 data: battlesPlayedPVP,
-                backgroundColor: ["red", "blue", "green", "purple"],
-                borderColor: 'rgba(255, 26, 104, 1)',
-                borderWidth: 1
+                backgroundColor: ["#3B5249", "#519872", "#A4B494", "#BEC5AD"],
+                // borderWidth: 1
             }]
         };
 
@@ -139,27 +145,44 @@ function Chart(props) {
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
                 }
-            }
+            },
+            maintainAspectRatio: false
         }
 
         return (
-            <Bar
-                options={options}
-                data={data}
-            />
+            <Grid
+                container
+                direction="column"
+                width="100%"
+                alignItems="center"
+                rowSpacing={2}
+            >
+                <Grid item>
+                    <Typography variant='h5' color="#FFFFFF">
+                        Bar Chart
+                    </Typography>
+                </Grid>
+                <Grid item sx={{ width: "100%", minHeight: "250px" }}>
+                    <Bar
+                        options={options}
+                        data={data}
+                    />
+                </Grid>
+
+            </Grid>
         )
     }
 
-    const displayLine = () => {
+    const lineChart = () => {
         const data = {
             labels: dates,
             datasets: [{
                 label: 'PVP Battles Survived by Player',
                 data: battlesSurvived,
-                backgroundColor: 'rgba(255, 26, 104, 0.2)',
-                borderColor: 'rgba(255, 26, 104, 1)',
+                backgroundColor: '#84B59F',
+                borderColor: '#50808E',
                 borderWidth: 1
             }]
         };
@@ -180,50 +203,85 @@ function Chart(props) {
                     to: 0,
                     loop: true
                 }
-            }
+            },
+            maintainAspectRatio: false
         }
 
         return (
-            <Line
-                options={options}
-                data={data}
-            />
+            <Grid
+                container
+                direction="column"
+                width="100%"
+                alignItems="center"
+                rowSpacing={2}
+            >
+                <Grid item>
+                    <Typography variant='h5' color="#FFFFFF">
+                        Line Chart
+                    </Typography>
+                </Grid>
+                <Grid item sx={{ width: "100%", minHeight: "250px" }}>
+                    <Line
+                        options={options}
+                        data={data}
+                    />
+                </Grid>
+            </Grid>
         )
     }
 
-    const displayPie = () => {
+    const pieChart = () => {
         const data = {
             labels: ['Wins', 'Losses'],
             datasets: [{
                 label: 'Win/Loss Ratio',
                 data: [winsPVP, lossesPVP],
-                backgroundColor: ["#a9e13e", "#520f0c"],
-                borderColor: 'rgba(255, 26, 104, 1)',
-                borderWidth: 1
+                backgroundColor: ["#DDD8C4", "#50808E"],
+                // borderColor: 'rgba(255, 26, 104, 1)',
+                // borderWidth: 1
             }]
         };
 
         return (
-            <Pie
-                data={data}
-            />
+            <Grid
+                container
+                direction="column"
+                width="100%"
+                alignItems="center"
+                rowSpacing={2}
+            >
+                <Grid item>
+                    <Typography variant='h5' color="#FFFFFF">
+                        Pie Chart
+                    </Typography>
+                </Grid>
+                <Grid item sx={{ width: "100%", minHeight: "250px" }}>
+                    <Pie
+                        data={data}
+                        height="300px"
+                        options={{ maintainAspectRatio: false }}
+                    />
+                </Grid>
+            </Grid>
         )
     }
 
     return (
-        <Container maxWidth='lg'>
-            <Grid container>
-                <Grid item xs={6}>
-                    {displayBar()}
-                </Grid>
-                <Grid item xs={4}>
-                    {displayLine()}
-                </Grid>
-                <Grid item xs={6}>
-                    {displayPie()}
-                </Grid>
-            </Grid>
-        </Container>
+        <div
+            style={{
+                minHeight: '100vh',
+                background: "#18151D",
+                padding: "60px"
+            }}
+        >
+            <Container maxWidth='md'>
+                {barChart()}
+                <Divider light sx={{ margin: "70px 0px", background: "#D0CCD0" }} />
+                {lineChart()}
+                <Divider light sx={{ margin: "70px 0px", background: "#D0CCD0" }} />
+                {pieChart()}
+            </Container>
+        </div>
     )
 }
 

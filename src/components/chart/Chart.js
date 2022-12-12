@@ -207,7 +207,6 @@ function Chart(props) {
                         data={data}
                     />
                 </Grid>
-
             </Grid>
         )
     }
@@ -229,8 +228,11 @@ function Chart(props) {
                 y: {
                     ticks: {
                         suggestedMin: 2900
-                    }
-                }
+                    },
+                    // beginAtZero: true,
+                    min:  2900,
+                    // max: 4000
+                }    
             },
             // animations: {
             //     tension: {

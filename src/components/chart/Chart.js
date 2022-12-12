@@ -10,12 +10,14 @@ import {
     Title,
     Tooltip,
     Legend,
+    RadialLinearScale
 } from 'chart.js';
 /* Components */
 import {
     Bar,
     Line,
     Pie,
+    Radar
 } from 'react-chartjs-2';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid"
@@ -28,6 +30,8 @@ function Chart(props) {
     const [pvpBattles, setPvpBattles] = useState({})
     const [survivedBattles, setSurvivedBattles] = useState({})
     const [winLossRatio, setWinLossRatio] = useState({})
+    const [goozombies, setGoozombies] = useState([])
+    const [goodNotBest, setGoodNotBest] = useState([])
 
     const { battlesPlayedPVP = [], playerFullName = [] } = pvpBattles
     const { battlesSurvived = [], dates = [] } = survivedBattles
@@ -37,6 +41,7 @@ function Chart(props) {
         fetchPVPBattles()
         fetchSurvivedBattles()
         fetchWinLossRatio()
+        fetchRadarData()
         window.scrollTo({
             top: 0,
             left: 0,
@@ -53,7 +58,8 @@ function Chart(props) {
         LineElement,
         Title,
         Tooltip,
-        Legend
+        Legend,
+        RadialLinearScale,
     );
 
     const fetchPVPBattles = async () => {
@@ -64,7 +70,7 @@ function Chart(props) {
 
             for (let account in result) {
                 battlesPlayedPVP.push(result[account]["statistics"]["pvp"]["battles"]);
-                playerFullName.push(result[account]["nickname"]);
+                playerFullName.push(`player: ${result[account]["nickname"]}`);
             }
 
             setPvpBattles({
@@ -119,6 +125,38 @@ function Chart(props) {
         }
     }
 
+    const fetchRadarData = async () => {
+        try {
+            const [statsGoozombies, statsGoodNotBest] = await Promise.all([
+                ChartAPI.StatsGoozombies(),
+                ChartAPI.StatsGoodNotBest(),
+            ])
+            const { data: goodZombies } = statsGoozombies
+            const { data: goodNotBest } = statsGoodNotBest
+
+            const goodZombiesResult = []
+            const goodNotBestResult = []
+
+            for (let account in goodZombies) {
+                goodZombiesResult.push(goodZombies[account]["statistics"]["pvp"]["main_battery"]["max_frags_battle"])
+                goodZombiesResult.push(goodZombies[account]["statistics"]["pvp"]["second_battery"]["max_frags_battle"])
+                goodZombiesResult.push(goodZombies[account]["statistics"]["pvp"]["ramming"]["max_frags_battle"])
+                goodZombiesResult.push(goodZombies[account]["statistics"]["pvp"]["torpedoes"]["max_frags_battle"])
+            }
+            for (let account in goodNotBest) {
+                goodNotBestResult.push(goodNotBest[account]["statistics"]["pvp"]["main_battery"]["max_frags_battle"])
+                goodNotBestResult.push(goodNotBest[account]["statistics"]["pvp"]["second_battery"]["max_frags_battle"])
+                goodNotBestResult.push(goodNotBest[account]["statistics"]["pvp"]["ramming"]["max_frags_battle"])
+                goodNotBestResult.push(goodNotBest[account]["statistics"]["pvp"]["torpedoes"]["max_frags_battle"])
+            }
+
+            setGoozombies(goodZombiesResult)
+            setGoodNotBest(goodNotBestResult)
+        } catch {
+
+        }
+    }
+
     const barChart = () => {
         const data = {
             labels: playerFullName,
@@ -154,17 +192,16 @@ function Chart(props) {
         return (
             <Grid
                 container
-                direction="column"
                 width="100%"
                 alignItems="center"
                 rowSpacing={2}
             >
-                <Grid item>
+                <Grid item xs={3}>
                     <Typography variant='h5' color="#FFFFFF">
-                        Bar Chart
+                        Battles Fought
                     </Typography>
                 </Grid>
-                <Grid item sx={{ width: "100%", minHeight: "250px" }}>
+                <Grid item xs={9} sx={{ width: "100%", minHeight: "250px" }}>
                     <Bar
                         options={options}
                         data={data}
@@ -195,32 +232,31 @@ function Chart(props) {
                     }
                 }
             },
-            animations: {
-                tension: {
-                    duration: 3000,
-                    easing: 'linear',
-                    from: 1,
-                    to: 0,
-                    loop: true
-                }
-            },
+            // animations: {
+            //     tension: {
+            //         duration: 3000,
+            //         easing: 'linear',
+            //         from: 1,
+            //         to: 0,
+            //         loop: true
+            //     }
+            // },
             maintainAspectRatio: false
         }
 
         return (
             <Grid
                 container
-                direction="column"
                 width="100%"
                 alignItems="center"
                 rowSpacing={2}
             >
-                <Grid item>
+                <Grid item xs={3}>
                     <Typography variant='h5' color="#FFFFFF">
-                        Line Chart
+                        Battles Survived
                     </Typography>
                 </Grid>
-                <Grid item sx={{ width: "100%", minHeight: "250px" }}>
+                <Grid item xs={9} sx={{ width: "100%", minHeight: "250px" }}>
                     <Line
                         options={options}
                         data={data}
@@ -237,30 +273,88 @@ function Chart(props) {
                 label: 'Win/Loss Ratio',
                 data: [winsPVP, lossesPVP],
                 backgroundColor: ["#DDD8C4", "#50808E"],
-                // borderColor: 'rgba(255, 26, 104, 1)',
-                // borderWidth: 1
             }]
         };
 
         return (
             <Grid
                 container
-                direction="column"
                 width="100%"
                 alignItems="center"
                 rowSpacing={2}
             >
-                <Grid item>
+                <Grid item xs={3}>
                     <Typography variant='h5' color="#FFFFFF">
-                        Pie Chart
+                        Win/Loss Ratio
                     </Typography>
                 </Grid>
-                <Grid item sx={{ width: "100%", minHeight: "250px" }}>
+                <Grid item xs={9} sx={{ width: "100%", minHeight: "250px" }}>
                     <Pie
                         data={data}
                         height="300px"
                         options={{ maintainAspectRatio: false }}
                     />
+                </Grid>
+            </Grid>
+        )
+    }
+
+    const radarChart = () => {
+        const data = {
+            labels: ['Main Battery Max Kills', 'Secondary Max Kills', 'Ramming Max Kills', 'Torpedo Max Kills'],
+            datasets: [{
+                label: 'Goozombies Max kills by type in one battle',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgb(255, 99, 132)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgb(255, 99, 132)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(255, 99, 132)',
+                data: goozombies
+            },
+            {
+                label: 'Goodbutnotthebest Max kills by type in one battle',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgb(54, 162, 235)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgb(54, 162, 235)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(54, 162, 235)',
+                data: goodNotBest
+            }]
+        }
+
+        const options = {
+            scales: {
+                r: {
+                    grid: {
+                        color: "#575758",
+                    },
+                    ticks: {
+                        textStrokeColor: 'rgb(54, 162, 235)',
+                        color: 'rgba(240, 240, 240, 0.5)',
+                        backdropColor: '#18151D'
+                    },
+                },
+            }
+        }
+
+        return (
+            <Grid
+                container
+                width="100%"
+                alignItems="center"
+                rowSpacing={2}
+            >
+                <Grid item xs={3}>
+                    <Typography variant='h5' color="#FFFFFF">
+                        Radar Chart
+                    </Typography>
+                </Grid>
+                <Grid item xs={9} sx={{ width: "100%", minHeight: "250px" }}>
+                    <Radar data={data} options={options} />
                 </Grid>
             </Grid>
         )
@@ -274,12 +368,14 @@ function Chart(props) {
                 padding: "60px"
             }}
         >
-            <Container maxWidth='md'>
+            <Container maxWidth='lg'>
                 {barChart()}
                 <Divider light sx={{ margin: "70px 0px", background: "#D0CCD0" }} />
                 {lineChart()}
                 <Divider light sx={{ margin: "70px 0px", background: "#D0CCD0" }} />
                 {pieChart()}
+                <Divider light sx={{ margin: "70px 0px", background: "#D0CCD0" }} />
+                {radarChart()}
             </Container>
         </div>
     )

@@ -1,29 +1,18 @@
-import { useEffect } from "react";
 import "./Home.css"
 import _ from 'lodash'
 import { useTheme } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import { useNavigate } from "react-router-dom";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Fade from 'react-reveal/Fade';
 import { LazyLoadImage } from "react-lazy-load-image-component";
 /* components */
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
 /* Icons */
-import CheckCircleIcon from 'mdi-react/CheckCircleIcon'
 import ArrowRightIcon from 'mdi-react/ArrowRightIcon'
-import TwitterIcon from "mdi-react/TwitterIcon";
-import ArrowTopRightIcon from "mdi-react/ArrowTopRightIcon";
-import PlayCircleIcon from "mdi-react/PlayCircleIcon";
-import NoteTextIcon from "mdi-react/NoteTextIcon";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 /* Constants */
 import { Paths } from "constants/general"
@@ -39,6 +28,29 @@ const useStyles = makeStyles((theme) => ({
         opacity: "0.3"
     },
 }));
+
+const Ships = [
+    {
+        name: "The Destroyer",
+        desc: "Destroyers are fast and nimble ships armed with small, rapid firing guns and torpedoes. Use torpedoes on large capiital ships like battleships for great damage!",
+        image: "https://glossary-wows-global.gcdn.co/icons//vehicle/large/PJSD012_4987da3686b0f43c7522f014d69a9b73fa54ac424750a24104cb27e55f3a9e4a.png",
+    },
+    {
+        name: "The Cruiser",
+        desc: "Cruisers generally have decent manuverability and larger caliber guns compared to destoyers that fire slower but do more damage. They are ideal for hunting destroyers and annoying battleships with a constant volume of shellfire.",
+        image: "https://global-uploads.webflow.com/5f3b47f17450d701e192bea8/60884e58f2a9a66e806a2b41_wvm5mqk9x2bub6q8kq23uj7x4g2j8tbn.png",
+    },
+    {
+        name: "The Battleship",
+        desc: "Slow and as tough as nails, battleships have the armor to withstand shellfire and the punching power to potentially sink cruisers in one salvo. The main bane of battleships are torpedos and arial attack from aircraft carriers. Fight battleships and protect your cruisers.",
+        image: "https://wows-wowsp-global.gcdn.co/media/ceph-image/88303178-6c62-11eb-9be1-8cdcd4b147d4.jpg",
+    },
+    {
+        name: "The Aircraft Carrier",
+        desc: "Aircraft carriers are the most important class in the game since they can provide intelligence and spotting for the team. With a wide array of armament such as bombs, torpedoes, and rockets, aircraft carriers can strike both cruisers and battleships with ease. Be warned however, they quickly fall under fire when spotted.",
+        image: "http://thedailybounce.net/wp-content/uploads/2018/09/453ba394-aa17-11e8-8bd1-ac162d8bc1e4_1200x.jpg",
+    },
+]
 
 function Home(props) {
     const classes = useStyles();
@@ -77,10 +89,10 @@ function Home(props) {
                     position: "relative",
                     minHeight: '100vh',
                     color: "white",
-                    backgroundImage: `url(${BackgroundCurve})`,
+                    // backgroundImage: `url(${BackgroundCurve})`,
                     backgroundSize: 'cover',
                     background: "radial-gradient(100% 351.56% at 0% 100%, rgba(23, 21, 28, 0.94) 45%, rgba(23, 21, 28, 0) 90%)",
-                    zIndex: 9999,
+                    // zIndex: 9999,
                 }}
             >
                 <Box
@@ -93,13 +105,15 @@ function Home(props) {
                     flexDirection='column'
                     alignItems='center'
                     justifyContent='center'
+                    minHeight="100vh"
                 >
                     <Fade bottom cascade>
-                        <Typography variant='h3' style={{ marginBottom: 20 }}>
+                        <Typography variant='h3' style={{ marginBottom: 36 }}>
                             World of Warships
                         </Typography>
-                        <Typography variant='h6' style={{ color: theme.palette.common.white, marginBottom: 60 }}>
-                            A strategic online action game with a huge fleet of legendary warships
+                        <Typography variant='h6' textAlign="center" style={{ color: theme.palette.common.white, marginBottom: 60 }}>
+                            A strategic online action game with a huge fleet of legendary warships <br />
+                            Take charge of differrent classes of ships as you battle it out for supremecy of the seas!
                         </Typography>
                         <Button
                             variant='contained'
@@ -119,10 +133,45 @@ function Home(props) {
                 <Box
                     className="downIcon"
                     position="absolute"
-                    bottom="50px"
+                    top="90vh"
                 >
                     <KeyboardDoubleArrowDownIcon />
                 </Box>
+                {_.map(Ships, (el) => {
+                    const { name = "", desc = "", image } = el
+                    return (
+                        <Grid
+                            key={name}
+                            item
+                            xs={12}
+                            sx={{ minHeight: "70vh" }}
+                            container
+                            alignItems="center"
+                        >
+                            <Grid xs={4} sx={{ padding: "0px 32px" }}>
+                                <Typography variant="h3" textAlign="center" sx={{ marginBottom: "36px" }}>
+                                    {name}
+                                </Typography>
+                                <Typography variant="body2" textAlign="center">
+                                   {desc}
+                                </Typography>
+                            </Grid>
+                            <Grid xs={8} sx={{ padding: "0px 32px" }}>
+                                <Stack>
+                                    <img
+                                        src={image}
+                                        style={{
+                                            width: "100%",
+                                            objectFit: "cover",
+                                            objectPosition: "center"
+                                        }}
+                                    />
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                    )
+                })}
+
             </Grid>
         )
     }
@@ -272,7 +321,8 @@ function Home(props) {
                     >
                         {/* Content */}
                         <Typography variant='h3' align='center' style={{ color: theme.palette.common.white, marginBottom: 40 }}>
-                            Discover the statistics of WOW. <br />Together we fight.
+                            Discover the statistics of WOW.
+                            {/* <br />Together we fight. */}
                         </Typography>
 
                         <Button

@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useRef } from 'react';
 import "./Home.css"
 import _ from 'lodash'
 import { useTheme } from "@mui/material/styles";
@@ -13,6 +14,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 /* Icons */
 import ArrowRightIcon from 'mdi-react/ArrowRightIcon'
+import ArrowDownIcon from 'mdi-react/ArrowDownIcon'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 /* Constants */
 import { Paths } from "constants/general"
@@ -57,6 +59,10 @@ function Home(props) {
     const theme = useTheme();
     const navigate = useNavigate();
 
+    const myRef = useRef(null)
+
+    const executeScroll = () => myRef.current.scrollIntoView({behavior: 'smooth', block: 'start'}) 
+   
     const goChart = () => {
         navigate(Paths.Chart)
     }
@@ -117,8 +123,8 @@ function Home(props) {
                         </Typography>
                         <Button
                             variant='contained'
-                            endIcon={<ArrowRightIcon />}
-                            onClick={goChart}
+                            endIcon={<ArrowDownIcon />}
+                            onClick={executeScroll}
                             sx={{
                                 borderRadius: 0,
                                 boxShadow: 'none',
@@ -126,11 +132,12 @@ function Home(props) {
                                 color: "#FFFFFF"
                             }}
                         >
-                            Go To Chart
+                            Explore More
                         </Button>
                     </Fade>
                 </Box>
                 <Box
+                    ref={myRef}
                     className="downIcon"
                     position="absolute"
                     top="90vh"
@@ -153,7 +160,7 @@ function Home(props) {
                                     {name}
                                 </Typography>
                                 <Typography variant="body2" textAlign="center">
-                                   {desc}
+                                    {desc}
                                 </Typography>
                             </Grid>
                             <Grid xs={8} sx={{ padding: "0px 32px" }}>
@@ -171,7 +178,6 @@ function Home(props) {
                         </Grid>
                     )
                 })}
-
             </Grid>
         )
     }
